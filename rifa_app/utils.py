@@ -24,6 +24,7 @@ def salvar_comprovante(arquivo_imagem):
     nome_arquivo = f"Comprovante_rifa_{time.strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:8]}.jpg"
 
     # Caminho para o arquivo de credenciais
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     credentials_path = os.environ.get("GOOGLE_CREDENTIALS",
                                  os.path.join(BASE_DIR, "credentials.json"))
 
