@@ -25,8 +25,7 @@ def salvar_comprovante(arquivo_imagem):
 
     # Caminho para o arquivo de credenciais
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    credentials_path = os.environ.get("GOOGLE_CREDENTIALS",
-                                 os.path.join(BASE_DIR, "credentials.json"))
+    credentials_path = os.path.join(BASE_DIR, "credentials.json")
 
     # ID da pasta de destino no Google Drive
     pasta_id = "1w3xYpOX3ootL4jmm0_lQk7LjSvAkAras"
