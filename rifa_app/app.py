@@ -26,7 +26,6 @@ def main():
     credentials_path = os.environ.get("GOOGLE_CREDENTIALS",
                                  os.path.join(BASE_DIR, "credentials.json"))
     st.write("Usando credenciais de:", credentials_path)
-    st.write("Service account:", credentials.service_account_email)
     spreadsheet_name = os.environ.get("SPREADSHEET_NAME", "Sistema de Rifas")
     
     # Inicializar o gerenciador em um bloco try/except para lidar com erros
