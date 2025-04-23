@@ -22,7 +22,8 @@ def main():
     
     # Inicializar o gerenciador de planilhas
     # Em produção, você deve usar st.secrets para armazenar o caminho de credenciais
-    credentials_path = os.environ.get("GOOGLE_CREDENTIALS", "credentials.json")
+    credentials_path = os.environ.get("GOOGLE_CREDENTIALS",
+                                 os.path.join(BASE_DIR, "credentials.json"))
     spreadsheet_name = os.environ.get("SPREADSHEET_NAME", "Sistema de Rifas")
     
     # Inicializar o gerenciador em um bloco try/except para lidar com erros
