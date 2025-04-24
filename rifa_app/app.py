@@ -10,15 +10,24 @@ def main():
     # Configurações da página
     st.set_page_config(
         page_title="Sistema de Rifas",
-        page_icon="🎫",
+        page_icon="img/CARCARÁ.png",  # Isso define o ícone da aba
         layout="wide"
     )
-    
-    # Título e descrição
-    st.title("🎫 Sistema de Rifas")
+
+    col1, col2 = st.columns([2, 5])  # Ajuste os valores para balancear largura
+
+    with col1:
+        st.image("img/CARCARÁ.png", width=80)  # Tamanho ajustável
+
+    with col2:
+        st.title("Rifa IEEE - RNR")
     st.markdown("""
-    Escolha seus números da sorte! Preencha o formulário abaixo para participar.
-    """)
+    <div style='font-size:18px; line-height:1.6; margin-top: 10px;'>
+        <b>🎁 Concorra a uma incrível Garrafa Térmica Fresh 950ml da GoCase!</b><br>
+        Escolha seus números da sorte e preencha o formulário abaixo para garantir sua participação.<br>
+        ✨ Mantenha suas bebidas geladas com estilo e praticidade — não perca essa chance!
+    </div>
+    """, unsafe_allow_html=True)
     
     # Inicializar o gerenciador de planilhas
     # Em produção, você deve usar st.secrets para armazenar o caminho de credenciais
