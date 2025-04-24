@@ -8,10 +8,13 @@ import streamlit as st
 
 class SheetsManager:
     def __init__(self, credentials_path=None, spreadsheet_name="Sistema de Rifas"):
-        scope = ['https://spreadsheets.google.com/feeds',
-                 'https://www.googleapis.com/auth/drive']
+        scope = [
+            'https://www.googleapis.com/auth/spreadsheets',
+            'https://www.googleapis.com/auth/drive'
+        ]
 
         try:
+            # Tenta carregar credenciais do Streamlit secrets (deploy)
             credentials_info = dict(st.secrets["gcp_service_account"])
             if "private_key" in credentials_info:
                 credentials_info["private_key"] = credentials_info["private_key"].replace("\\n", "\n")
@@ -21,6 +24,7 @@ class SheetsManager:
         except Exception as e:
             print(f"Erro ao carregar credenciais do Streamlit: {e}")
             if credentials_path:
+                # Fallback para arquivo local (desenvolvimento)
                 credentials = Credentials.from_service_account_file(credentials_path, scopes=scope)
                 print(f"Usando credenciais do arquivo: {credentials_path}")
             else:
@@ -35,15 +39,7 @@ class SheetsManager:
             print(f"Erro ao abrir planilha por nome: {str(e)}")
             raise
 
-        client = gspread.authorize(credentials)
-
-        try:
-            self.spreadsheet = client.open(spreadsheet_name)
-            print(f"Planilha aberta com sucesso: {self.spreadsheet.title}")
-        except Exception as e:
-            print(f"Erro ao abrir planilha por nome: {str(e)}")
-            raise
-
+        # Tenta carregar as worksheets, ou cria se não existirem
         try:
             self.numeros_worksheet = self.spreadsheet.worksheet("Numeros")
         except gspread.exceptions.WorksheetNotFound:
@@ -54,6 +50,7 @@ class SheetsManager:
         except gspread.exceptions.WorksheetNotFound:
             self.registros_worksheet = self.spreadsheet.add_worksheet("Registros", 1000, 5)  # Ajuste tamanho se quiser
 
+        # Inicializa planilhas, se necessário
         self._inicializar_planilha_numeros()
         self._inicializar_planilha_registros()
 

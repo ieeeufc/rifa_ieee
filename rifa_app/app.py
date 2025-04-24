@@ -4,7 +4,7 @@ from PIL import Image
 import pandas as pd
 import io
 from sheets_manager import SheetsManager
-from utils import salvar_comprovante, validar_numero_contato
+from utils import salvar_comprovante, validar_numero_contato, carregar_credenciais
 
 def main():
     # Configurações da página
