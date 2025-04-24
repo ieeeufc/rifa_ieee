@@ -1,30 +1,62 @@
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2.service_account import Credentials
 import pandas as pd
 import os
+import json
+import streamlit as st
+
 
 class SheetsManager:
-    def __init__(self, credentials_path, spreadsheet_name):
-        """
-        Inicializa o gerenciador de planilhas do Google Sheets.
-        
-        Args:
-            credentials_path: Caminho para o arquivo de credenciais JSON do Google API
-            spreadsheet_name: Nome da planilha do Google Sheets
-        """
+    def __init__(self, credentials_path=None, spreadsheet_name="Sistema de Rifas"):
         scope = ['https://spreadsheets.google.com/feeds',
                  'https://www.googleapis.com/auth/drive']
-                 
-        credentials = ServiceAccountCredentials.from_json_keyfile_name(credentials_path, scope)
+
+        try:
+            credentials_info = dict(st.secrets["gcp_service_account"])
+            if "private_key" in credentials_info:
+                credentials_info["private_key"] = credentials_info["private_key"].replace("\\n", "\n")
+
+            credentials = Credentials.from_service_account_info(credentials_info, scopes=scope)
+            print("Usando credenciais dos secrets do Streamlit")
+        except Exception as e:
+            print(f"Erro ao carregar credenciais do Streamlit: {e}")
+            if credentials_path:
+                credentials = Credentials.from_service_account_file(credentials_path, scopes=scope)
+                print(f"Usando credenciais do arquivo: {credentials_path}")
+            else:
+                raise Exception("Credenciais não encontradas nem nos secrets nem no arquivo local")
+
         client = gspread.authorize(credentials)
-        
-        self.spreadsheet = client.open(spreadsheet_name)
-        self.numeros_worksheet = self.spreadsheet.worksheet("Numeros")
-        self.registros_worksheet = self.spreadsheet.worksheet("Registros")
-        
-        # Verifica se a planilha de números está inicializada, se não, cria
+
+        try:
+            self.spreadsheet = client.open(spreadsheet_name)
+            print(f"Planilha aberta com sucesso: {self.spreadsheet.title}")
+        except Exception as e:
+            print(f"Erro ao abrir planilha por nome: {str(e)}")
+            raise
+
+        client = gspread.authorize(credentials)
+
+        try:
+            self.spreadsheet = client.open(spreadsheet_name)
+            print(f"Planilha aberta com sucesso: {self.spreadsheet.title}")
+        except Exception as e:
+            print(f"Erro ao abrir planilha por nome: {str(e)}")
+            raise
+
+        try:
+            self.numeros_worksheet = self.spreadsheet.worksheet("Numeros")
+        except gspread.exceptions.WorksheetNotFound:
+            self.numeros_worksheet = self.spreadsheet.add_worksheet("Numeros", 250, 2)
+
+        try:
+            self.registros_worksheet = self.spreadsheet.worksheet("Registros")
+        except gspread.exceptions.WorksheetNotFound:
+            self.registros_worksheet = self.spreadsheet.add_worksheet("Registros", 1000, 5)  # Ajuste tamanho se quiser
+
         self._inicializar_planilha_numeros()
         self._inicializar_planilha_registros()
+
         
     def _inicializar_planilha_numeros(self):
         """Inicializa a planilha de números caso ainda não tenha sido configurada."""

@@ -1,0 +1,68 @@
+credentials.json
+.streamlit/secrets.toml
+*.pem
+*.key
+*.crt
+
+# Arquivos Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Ambientes virtuais
+venv/
+env/
+ENV/
+.env
+.venv
+env.bak/
+venv.bak/
+.python-version
+
+# Poetry
+.poetry/
+poetry.lock
+
+# Editores e IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+.project
+.pydevproject
+.settings/
+
+# Arquivos temporários
+*.log
+.cache/
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+
+# Arquivos de upload e outros arquivos temporários que podem ser gerados pelo aplicativo
+tmp/
+uploads/
+*.tmp

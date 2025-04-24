@@ -22,19 +22,28 @@ def main():
     
     # Inicializar o gerenciador de planilhas
     # Em produção, você deve usar st.secrets para armazenar o caminho de credenciais
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    credentials_path = os.path.join(BASE_DIR, "credentials.json")
-    st.write("Usando credenciais de:", credentials_path)
-    spreadsheet_name = os.environ.get("SPREADSHEET_NAME", "Sistema de Rifas")
-    
-    # Inicializar o gerenciador em um bloco try/except para lidar com erros
+    spreadsheet_name = 'Sistema de Rifas'
     try:
-        sheets_manager = SheetsManager(credentials_path, spreadsheet_name)
+        # Tenta primeiro usar os secrets (para deploy)
+        credentials_info = st.secrets["gcp_service_account"]
+        print("Chave privada (primeiros 30 caracteres):", repr(credentials_info["private_key"][:30]))
+        
+        sheets_manager = SheetsManager(credentials_info=credentials_info, spreadsheet_name=spreadsheet_name)
         numeros_disponiveis = sheets_manager.obter_numeros_disponiveis()
+
     except Exception as e:
-        st.error(f"Erro ao conectar com Google Sheets: {str(e)}")
-        st.error("Verifique se o arquivo de credenciais está correto e se a planilha existe.")
-        st.stop()
+        try:
+            # Se falhar, tenta com o arquivo local (para desenvolvimento)
+            BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+            credentials_path = os.path.join(BASE_DIR, "credentials.json")
+            print("Usando credenciais de arquivo local:", credentials_path)
+            
+            sheets_manager = SheetsManager(credentials_path=credentials_path, spreadsheet_name=spreadsheet_name)
+            numeros_disponiveis = sheets_manager.obter_numeros_disponiveis()
+        except Exception as e:
+            st.error(f"Erro ao conectar com Google Sheets: {str(e)}")
+            st.error("Verifique se o arquivo de credenciais está correto e se a planilha existe.")
+            st.stop()
     
     # Exibir números disponíveis
     st.subheader("Números Disponíveis")
