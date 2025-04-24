@@ -9,21 +9,21 @@ from utils import salvar_comprovante, validar_numero_contato, carregar_credencia
 def main():
     # Configurações da página
     st.set_page_config(
-        page_title="Sistema de Rifas",
-        page_icon="img/CARCARÁ.png",  # Isso define o ícone da aba
+        page_title="Rifa RNR",
+        page_icon="img/CARCARÁ.jpg",  # Isso define o ícone da aba
         layout="wide"
     )
 
-    col1, col2 = st.columns([2, 5])  # Ajuste os valores para balancear largura
+    col1, col2 = st.columns([2, 6])  # Ajuste os valores para balancear largura
 
     with col1:
-        st.image("img/CARCARÁ.png", width=80)  # Tamanho ajustável
+        st.image("img/CARCARÁ.jpg", width=80)  # Tamanho ajustável
 
     with col2:
-        st.title("Rifa IEEE - RNR")
+        st.title("Rifa Reunião Nacional dos Ramos IEEE")
     st.markdown("""
     <div style='font-size:18px; line-height:1.6; margin-top: 10px;'>
-        <b>🎁 Concorra a uma incrível Garrafa Térmica Fresh 950ml da GoCase!</b><br>
+        <h2>🎁 Concorra a uma incrível Garrafa Térmica Fresh 950ml da Gocase!</h2><br>
         Escolha seus números da sorte e preencha o formulário abaixo para garantir sua participação.<br>
         ✨ Mantenha suas bebidas geladas com estilo e praticidade — não perca essa chance!
     </div>
@@ -77,10 +77,10 @@ def main():
     # Exibir tabela com números disponíveis (formatada em grid)
     if numeros_disponiveis:
         # Criamos uma lista de listas, onde cada lista interna tem 10 elementos
-        # para exibir os números em uma grid de 10 colunas
+        # para exibir os números em uma grid de 6 colunas
         grid_data = []
-        for i in range(0, len(numeros_disponiveis), 10):
-            grid_data.append(numeros_disponiveis[i:i+10])
+        for i in range(0, len(numeros_disponiveis), 6):
+            grid_data.append(numeros_disponiveis[i:i+6])
         
         # Criar um DataFrame com as linhas da grid
         grid_df = pd.DataFrame(grid_data)
