@@ -106,7 +106,7 @@ def main():
         # Upload do comprovante
         st.markdown("### Comprovante de Pagamento")
         st.markdown("""
-        Faça o PIX para: ieee@email.com
+        Faça o PIX para: pedrorrochaj@gmail.com
         Valor: R$ 6,00 por número escolhido
         """)
         
