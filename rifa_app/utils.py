@@ -45,7 +45,7 @@ def salvar_comprovante(arquivo_imagem):
         drive_service = build('drive', 'v3', credentials=credentials)
 
         # Preparar arquivo para upload
-        arquivo_imagem.seek(0)  # Garantir cursor no começo
+        arquivo_imagem.seek(0)
         bytes_data = io.BytesIO(arquivo_imagem.read())
         media = MediaIoBaseUpload(bytes_data, mimetype=arquivo_imagem.type)
 
@@ -61,13 +61,11 @@ def salvar_comprovante(arquivo_imagem):
             fields='id,webViewLink'
         ).execute()
 
-        drive_link = file.get('webViewLink', "")
-        return drive_link
+        return file.get('webViewLink', "")
 
     except Exception as e:
         st.error(f"Erro ao salvar comprovante no Google Drive: {e}")
         return f"https://drive.google.com/drive/u/4/folders/{pasta_id}/{nome_arquivo}"
-
 
 def validar_numero_contato(contato):
     """
